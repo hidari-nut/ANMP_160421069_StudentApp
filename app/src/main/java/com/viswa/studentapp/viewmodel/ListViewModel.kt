@@ -12,6 +12,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.viswa.studentapp.model.Lecturer
 import com.viswa.studentapp.model.Student
 
 class ListViewModel(application: Application): AndroidViewModel(application) {
@@ -19,41 +20,44 @@ class ListViewModel(application: Application): AndroidViewModel(application) {
     val studentsLoadErrorLD = MutableLiveData<Boolean>()
     val loadingLD = MutableLiveData<Boolean>()
 
+    var lecturerLD=MutableLiveData<ArrayList<Lecturer>>()
+    val lecturerLoadErrorLD = MutableLiveData<Boolean>()
+
     val TAG = "volleyTag"
     private var queue: RequestQueue?=null
 
     fun refresh(){
-        //volley
-        //bisa cari data dari :
-        // query db sqlite
-        // xml
-        // shared preference
-//studentsLD.value = arrayListOf(
-//        Student("001", "John", "1999-05-15", "+123456789", "https://picsum.photos/200"),
-//        Student("002", "Alice", "2000-02-28", "+987654321", "https://picsum.photos/200"),
-//        Student("003", "Michael", "1998-11-10", "+111222333", "https://picsum.photos/200"),
-//        Student("004", "Emily", "1997-08-20", "+444555666", "https://picsum.photos/200"),
-//        Student("005", "David", "2001-04-03", "+777888999", "https://picsum.photos/200")
-//)
+
         studentsLoadErrorLD.value = false
+        lecturerLoadErrorLD.value = false
+
         loadingLD.value = true
 
         queue = Volley.newRequestQueue(getApplication())
-        val url ="http://adv.jitusolution.com/student.php"
-  
+        //val url ="http://adv.jitusolution.com/student.php"
+        val urlLect ="http://10.0.2.2/anmp/lecturer.json"
+
         val stringRequest = StringRequest(
             Request.Method.GET,
-            url, {
-                val sType = object:TypeToken<List<Student>>(){}.type
-                val result = Gson().fromJson<List<Student>>(it, sType)
-                studentsLD.value = result as ArrayList<Student>?
+            urlLect, {
+                //val sType = object:TypeToken<List<Student>>(){}.type
+var x = ""
+                val sType = object:TypeToken<List<Lecturer>>(){}.type
+
+                //val result = Gson().fromJson<List<Student>>(it, sType)
+
+                val result = Gson().fromJson<List<Lecturer>>(it, sType)
+
+                //studentsLD.value = result as ArrayList<Student>?
+                lecturerLD.value = result as ArrayList<Lecturer>?
 
                 loadingLD.value = false
                 Log.d("show volley", it)
                  },
             {
                loadingLD.value = false
-            studentsLoadErrorLD.value = false
+                studentsLoadErrorLD.value = false
+                lecturerLoadErrorLD.value = false
             Log.d("showvolley", it.toString())
         })
         stringRequest.tag = TAG

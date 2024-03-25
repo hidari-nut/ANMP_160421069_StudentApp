@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.viswa.studentapp.R
 import com.viswa.studentapp.databinding.FragmentStudentListBinding
 import com.viswa.studentapp.viewmodel.ListViewModel
@@ -38,8 +39,18 @@ private val studentListAdapter = StudentListAdapter(arrayListOf())
         binding.recView.layoutManager = LinearLayoutManager(context)
         binding.recView.adapter = studentListAdapter
 
+       // val swipe = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayout)
+
+        binding.refreshLayout.setOnRefreshListener {
+            viewModel.refresh()
+            binding.recView.visibility = View.GONE
+            binding.txtError.visibility = View.GONE
+            binding.progressLoad.visibility = View.VISIBLE
+            binding.refreshLayout.isRefreshing = false
+        }
         observeViewModel()
     }
+
 
     fun observeViewModel(){
         viewModel.studentsLD.observe(viewLifecycleOwner

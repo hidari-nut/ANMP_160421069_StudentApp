@@ -1,3 +1,12 @@
 package com.viswa.studentapp.model
 
-data class Student(var id:String?, var name:String?, var DoB:String?, var phone:String?, var photoUrl:String?)
+import com.google.gson.annotations.SerializedName
+
+data class Student(var id:String?,
+                   @SerializedName("student_name")
+                   var name:String?,
+                   @SerializedName("birth_of_date")
+                   var DoB:String?,
+                   var phone:String?,
+                   @SerializedName("photo_url")
+                   var photoUrl:String?)

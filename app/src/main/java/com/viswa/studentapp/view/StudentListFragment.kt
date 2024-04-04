@@ -56,9 +56,9 @@ private val studentListAdapter = StudentListAdapter(arrayListOf())
         viewModel.studentsLD.observe(viewLifecycleOwner
             , Observer {studentListAdapter.updateStudentList(it)
             Log.d("checkloading", "OK" + it.toString())})
-viewModel.loadingLD.observe(viewLifecycleOwner, Observer {
+            viewModel.loadingLD.observe(viewLifecycleOwner, Observer {
     if(it==true){
-binding.recView.visibility= View.GONE
+        binding.recView.visibility= View.GONE
         binding.progressLoad.visibility = View.GONE
     }else{
         binding.recView.visibility = View.VISIBLE

@@ -8,7 +8,7 @@ data class Student(var id:String?,
                    @SerializedName("birth_of_date")
                    var DoB:String?,
                    var phone:String?,
-                   @SerializedName("student_photo")
+                   @SerializedName("photo_url")
                    var photoUrl:String?)
 data class Lecturer(var id: String?,
     var name: String?,

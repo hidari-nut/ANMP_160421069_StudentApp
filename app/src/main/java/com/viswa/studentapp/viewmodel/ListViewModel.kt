@@ -34,22 +34,22 @@ class ListViewModel(application: Application): AndroidViewModel(application) {
         loadingLD.value = true
 
         queue = Volley.newRequestQueue(getApplication())
-        //val url ="http://adv.jitusolution.com/student.php"
-        val urlLect ="http://10.0.2.2/anmp/lecturer.json"
+        val url ="http://adv.jitusolution.com/student.php"
+        //val urlLect ="http://10.0.2.2/anmp/lecturer.json"
 
         val stringRequest = StringRequest(
             Request.Method.GET,
-            urlLect, {
-                //val sType = object:TypeToken<List<Student>>(){}.type
-var x = ""
-                val sType = object:TypeToken<List<Lecturer>>(){}.type
+            url, {
+                val sType = object:TypeToken<List<Student>>(){}.type
 
-                //val result = Gson().fromJson<List<Student>>(it, sType)
+                //val sType = object:TypeToken<List<Lecturer>>(){}.type
 
-                val result = Gson().fromJson<List<Lecturer>>(it, sType)
+                val result = Gson().fromJson<List<Student>>(it, sType)
 
-                //studentsLD.value = result as ArrayList<Student>?
-                lecturerLD.value = result as ArrayList<Lecturer>?
+                //val result = Gson().fromJson<List<Lecturer>>(it, sType)
+
+                studentsLD.value = result as ArrayList<Student>?
+                //lecturerLD.value = result as ArrayList<Lecturer>?
 
                 loadingLD.value = false
                 Log.d("show volley", it)

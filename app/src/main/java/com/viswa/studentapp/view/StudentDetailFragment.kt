@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.squareup.picasso.Picasso
@@ -17,10 +18,9 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
-class StudentDetailFragment : Fragment() {
+class StudentDetailFragment : Fragment(), ButtonClickListener  {
     private lateinit var viewModel: DetailViewModel
     private lateinit var binding: FragmentStudentDetailBinding
-    private var studentId: String = ""
 
       override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,30 +35,23 @@ class StudentDetailFragment : Fragment() {
         val studentId = StudentDetailFragmentArgs.fromBundle(requireArguments()).studentId
         viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
         viewModel.fetch(studentId)
+        binding.listener = this
         observeViewModel()
     }
     fun observeViewModel(){
-        viewModel.studentLD.observe(viewLifecycleOwner
-            , Observer {
-                Picasso.get().load(it.photoUrl).into(binding.imageView2);
-                binding.txtId.setText(it.id)
-                binding.txtName.setText(it.name)
-                binding.txtDoB.setText(it.DoB)
-                binding.txtPhone.setText(it.phone)
-
-                var student = it
-
-                binding.btnUpdate.setOnClickListener{
-                    Observable.timer(5, TimeUnit.SECONDS)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe {
-                            Log.d("Messages", "five seconds")
-                            MainActivity.showNotif(student.name.toString(),
-                                "A new notification created",
-                                R.drawable.baseline_person_24)
-                        }
-                }
-})
+        viewModel.studentLD.observe(viewLifecycleOwner, Observer { student ->
+            student?.let {
+                Log.d("StudentDetailFragment", "Student data: $it")
+                binding.student = it
+            } ?: run {
+                Log.d("StudentDetailFragment", "Student data is null")
+            }
+        })
 }
+
+    override fun onButtonClick(v: View) {
+        if (v.id == R.id.btnUpdate) {
+            Toast.makeText(context, "Data updated", Toast.LENGTH_SHORT).show()
+        }
+    }
 }
